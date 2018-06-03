@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"> 
+    <head>
+        <meta charset="utf-8"/>
+        <style>
+            body {
+                width: 400px;
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+            <div id="search-container">
+                <h1>Search Confluence</h1>
+                <form id="search-form">
+                    <input id="query" autofocus placeholder="Enter a search...">
+                    <input type="submit">
+                </form>
+                <br />
+                <div id="results-container"></div>
+                <br />
+                <em>
+                    Searching <span id="search-url">your site</span>
+                    (<a id="show-setup" href="#">Change?</a>)
+                </em>
+            </div>
+            <div id="setup-container" hidden>
+                <h1>First time setup:</h1>
+                <h3>Enter the URL to your team's Confluence:</h3>
+                <form id="setup-form">
+                    https://<input id="setup-url" autofocus placeholder="myteam.atlassian.net">/wiki
+                    <input id="save" type="submit" value="Save">
+                </form>
+            </div>
+        </center>
+    </body>
+    <script src="search.js"></script>
+</html>
