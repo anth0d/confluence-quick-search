@@ -51,11 +51,12 @@
       searchInput.focus();
       searchForm.onsubmit = function(event) {
         event.preventDefault();
-        console.log('submitting');
+
         const q = document.getElementById('query').value;
         const newTabUrl = `https://${site}/wiki/dosearchsite.action?queryString=${encodeURIComponent(q)}`;
         // chrome.tabs.create({ url: newTabUrl });
         const searchUrl = `https://${site}/wiki/rest/quicknav/1/search?query=${encodeURIComponent(q)}`;
+        // const searchUrl = `https://${site}/wiki/rest/api/search?cql=siteSearch+~+${encodeURIComponent(`"${q}"`)}`;
         const resultsContainer = document.getElementById('results-container');
         resultsContainer.innerText = 'Searching...';
         const xhr = new XMLHttpRequest();
@@ -65,6 +66,7 @@
             resultsContainer.innerText = '';
             const resp = JSON.parse(xhr.responseText);
             const pages = resp.contentNameMatches[0];
+            // const pages = resp.results;
             // 0 - Pages [name, spaceName, href]
             /** example page
              * className: "content-type-page"
@@ -79,11 +81,19 @@
             // 3 - People []
             // 4 - Spaces []
             // 5 - Link to search more [{name, href}]
-            for (let result of resp.contentNameMatches[0]) {
+            for (let result of pages) {
               const link = document.createElement('a');
+              link.className = `search-result`;
               link.href = `https://${site}${result.href}`;
-              link.textContent = `${result.name} [${result.spaceName}]`;
               link.target = `_blank`;
+              const resultName = document.createElement('span');
+              resultName.className = `search-result-name`;
+              resultName.textContent = `${result.name}`;
+              link.appendChild(resultName);
+              const resultSpace = document.createElement('span');
+              resultSpace.className = `search-result-space`;
+              resultSpace.textContent = `${result.spaceName || ''}`;
+              link.appendChild(resultSpace);
               const para = document.createElement('p');
               para.appendChild(link);
               resultsContainer.appendChild(para);

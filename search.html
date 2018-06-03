@@ -4,17 +4,59 @@
         <meta charset="utf-8"/>
         <style>
             body {
-                width: 400px;
+                width: 300px;
+                margin: 20px 20px 10px 20px;
+                padding: 0;
+            }
+            h1 {
+                font-weight: 500;
+                font-size: 26px;
+            }
+            a:link {
+                text-decoration: none;
+            }
+
+            a:visited {
+                text-decoration: none;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            a:active {
+                text-decoration: underline;
+            }
+            .search-input {
+                width: 100%;
+                background-image: url(search.png);
+                background-repeat: no-repeat;
+                padding-left: 28px;
+                border: 0;
+                outline: none;
+                font-size: 1.4em;
+            }
+            .search-result {
+                display: inline-block;
+                text-align: start;
+                margin: 0em;
+                font: 400 11px system-ui;
+            }
+            .search-result-name {
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-size: 1.4em;
+            }
+            .search-result-space {
+                font-size: 1.2em;
             }
         </style>
     </head>
     <body>
-        <center>
             <div id="search-container">
-                <h1>Search Confluence</h1>
                 <form id="search-form">
-                    <input id="query" autofocus placeholder="Enter a search...">
-                    <input type="submit">
+                    <input class="search-input" id="query" autofocus placeholder="Search Confluence...">
                 </form>
                 <br />
                 <div id="results-container"></div>
@@ -32,7 +74,6 @@
                     <input id="save" type="submit" value="Save">
                 </form>
             </div>
-        </center>
     </body>
     <script src="search.js"></script>
 </html>
