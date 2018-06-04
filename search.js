@@ -20,18 +20,21 @@
     const searchDiv = document.getElementById('search-container');
     const setupButton = document.getElementById('show-setup');
 
+    // TODO - get user to add key command: chrome://extensions/shortcuts
     const showSetup = ({ site }) => {
       searchDiv.hidden = true;
       setupDiv.hidden = false;
 
       const setupForm = document.getElementById('setup-form');
-      const url = document.getElementById('setup-url');
+      const setupUrl = document.getElementById('setup-url');
       if (site) { 
-        url.value = site;
+        setupUrl.value = site;
       }
+      setupUrl.focus();
       setupForm.onsubmit = function(event) {
-        chrome.storage.sync.set('confluenceUrl', url);
-        showSearch({ site: url });
+        event.preventDefault();
+        const confluenceUrl = setupUrl.value;
+        chrome.storage.sync.set({ confluenceUrl }, () => showSearch({ site: confluenceUrl }));
       }
     }
   

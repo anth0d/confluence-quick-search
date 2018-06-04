@@ -1,7 +1,7 @@
 {
   "name": "Confluence Quick Search",
   "version": "1.0",
-  "description": "Press Ctrl+Shift+L to search your team's Confluence",
+  "description": "Quickly search your team's Confluence at the press of a button",
   "manifest_version": 2,
   "permissions": [
     "storage",
@@ -24,10 +24,9 @@
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
-        "default": "Ctrl+Shift+L",
-        "mac": "MacCtrl+Shift+L"
+        "default": "Ctrl+Shift+O"
       },
-      "description": "Open Confluence Search",
+      "description": "Open Confluence Quick Search",
       "global": true
     }
   },
