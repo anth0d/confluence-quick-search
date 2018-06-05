@@ -2,6 +2,10 @@
 
 Super fast search of your team's Confluence pages, by key command or by omnibox (that's what Google calls the address bar in Chrome)
 
+#TL;DR I want it
+
+## Install it via [Chrome Web Store](https://chrome.google.com/webstore/detail/confluence-quick-search/gimcmmlpmjffkpbomagapjhdfbbeldfk)
+
 # Example
 
 
@@ -28,3 +32,12 @@ Once you click the icon in Chrome, or activate the keyboard shortcut, you should
 
 It is not neccesary to include `https://` or `/wiki` in your URL.
 
+
+# I want to hack on it
+
+```bash
+git clone https://github.com/anth0d/chrome-confluence-search.git
+open chrome://extensions
+# click "LOAD UNPACKED"
+# select the location you cloned into
+```
