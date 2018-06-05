@@ -1,12 +1,29 @@
 chrome.runtime.onInstalled.addListener(function() {
-  chrome.omnibox.onInputEntered.addListener(function(text) {
-    // Encode user input for special characters , / ? : @ & = + $ #
-    var newURL = 'https://auth0team.atlassian.net/wiki/dosearchsite.action?queryString=' + encodeURIComponent(text);
-    chrome.tabs.create({ url: newURL });
+  chrome.omnibox.onInputEntered.addListener(function(text) {   
+    chrome.storage.sync.get('confluenceUrl', function(data) {
+      if (!data.confluenceUrl) {
+        alert('Click the extension and set a Confluence URL');
+        return;
+      } else {
+        chrome.tabs.create({ url: `https://${data.confluenceUrl}/wiki/dosearchsite.action?queryString=${encodeURIComponent(text)}` });
+      }
+    });
   });
-
-  chrome.commands.onCommand.addListener(function(command) {
-    console.log('onCommand event:', command);
-  });  
+  chrome.notifications.create('new-install-notification', {
+    type: 'basic',
+    iconUrl: 'images/connie-128.png',
+    title: 'Confluence Quick Search',
+    message: 'Click me and set a hotkey...',
+    contextMessage: 'Keyboard shortcut',
+    requireInteraction: true
+  }, (id) => {
+    chrome.notifications.onClicked.addListener(() => {
+      chrome.tabs.create({ url: 'chrome://extensions/shortcuts' }, ({ windowId }) => {
+        chrome.windows.update(windowId, { focused: true }, () => {
+          chrome.notifications.clear(id);
+          // yodawg I heard you like callbacks
+        });
+      });
+    });
+  });
 });
-

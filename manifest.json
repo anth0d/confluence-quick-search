@@ -1,9 +1,11 @@
 {
   "name": "Confluence Quick Search",
   "version": "1.0",
-  "description": "Quickly search your team's Confluence at the press of a button",
+  "description": "Quickly search your team's Confluence at the press of a button. ...also, adds the shortcut 'con' to the Chrome omnibox.",
   "manifest_version": 2,
+  "short_name": "confluence-quick-search",
   "permissions": [
+    "notifications",
     "storage",
     "https://*/"
   ],
@@ -14,26 +16,23 @@
   "browser_action": {
     "default_popup": "search.html",
     "default_icon": {
-      "16": "icon-16.png",
-      "32": "icon-32.png",
-      "48": "icon-40.png",
-      "128": "icon-40.png"
+      "16": "images/connie-16.png",
+      "32": "images/connie-32.png",
+      "48": "images/connie-48.png",
+      "128": "images/connie-128.png"
     }
   },
   "omnibox": { "keyword" : "con" },
   "commands": {
     "_execute_browser_action": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+O"
-      },
       "description": "Open Confluence Quick Search",
       "global": true
     }
   },
   "icons": {
-    "16": "icon-16.png",
-    "32": "icon-32.png",
-    "48": "icon-40.png",
-    "128": "icon-80.png"
+    "16": "images/connie-16.png",
+    "32": "images/connie-32.png",
+    "48": "images/connie-48.png",
+    "128": "images/connie-128.png"
   }
 }

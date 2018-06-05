@@ -14,10 +14,12 @@
             }
             a:link {
                 text-decoration: none;
+                color: #0052CC;
             }
 
             a:visited {
                 text-decoration: none;
+                color: #7A869A;
             }
 
             a:hover {
@@ -26,6 +28,10 @@
 
             a:active {
                 text-decoration: underline;
+                color: #0052CC;
+            }
+            .setup-input {
+                width: 60%;
             }
             .search-input {
                 width: 100%;
@@ -67,12 +73,13 @@
                 </em>
             </div>
             <div id="setup-container" hidden>
-                <h1>First time setup:</h1>
-                <h3>Enter the URL to your team's Confluence:</h3>
+                <h3>🛠 First time setup</h3>
+                <br />
                 <form id="setup-form">
-                    https://<input id="setup-url" autofocus placeholder="myteam.atlassian.net">/wiki
-                    <input id="save" type="submit" value="Save">
+                    <label>Your Confluence URL:</label>
+                    <pre>https://<input class="setup-input" id="setup-url" autofocus placeholder="myteam.atlassian.net">/wiki</pre>
                 </form>
+                <br />
             </div>
     </body>
     <script src="search.js"></script>
