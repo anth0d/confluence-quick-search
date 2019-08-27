@@ -17,6 +17,29 @@ const createResultElement = ({ site, href, name, space }) => {
   return p;
 }
 
+const errorMessageElement = ({ site }) => {
+  const pText = document.createElement('p');
+  const errorMessage = document.createElement('span');
+  errorMessage.textContent = `Error! Visit your site and log in:`;
+  pText.appendChild(errorMessage);
+
+  const pLink = document.createElement('p');
+  const preUrl = document.createElement('pre');
+  const a = document.createElement('a');
+  a.href = `https://${site}`;
+  a.title = a.href;
+  a.target = `_blank`;
+  preUrl.textContent = `https://${site}`;
+  a.appendChild(preUrl);
+  pLink.appendChild(a);
+
+  const div = document.createElement('div');
+  div.className = `search-result-name`;
+  div.appendChild(pText);
+  div.appendChild(pLink);
+  return div;
+};
+
 document.addEventListener('DOMContentLoaded', function() {
   const setupDiv = document.getElementById('setup-container');
   const searchDiv = document.getElementById('search-container');
@@ -69,16 +92,17 @@ document.addEventListener('DOMContentLoaded', function() {
       const xhr = new XMLHttpRequest();
       xhr.open("GET", searchUrl, true);
       xhr.onreadystatechange = () => {
-        if (xhr.readyState == 4) {
+        if (xhr.readyState === 4) {
           resultsContainer.innerText = '';
+          if (xhr.status !== 200) {
+            // probably not authenticated or URL is incorrect. Display error message:
+            resultsContainer.appendChild(errorMessageElement({ site: `${site}/wiki` }));
+            return;
+          }
           const resp = JSON.parse(xhr.responseText);
           // const pages = resp.contentNameMatches[0];
           const pages = resp.results;
           for (let result of pages) {
-            // const name = result.name;
-            // const space = result.spaceName;
-            // const href = result.href;
-            // resultsContainer.appendChild(createResultElement({site, href, name, space}));
             resultsContainer.appendChild(createResultElement({
               site: `${site}/wiki`,
               name: result.content.title,

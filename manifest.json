@@ -1,6 +1,6 @@
 {
   "name": "Confluence Quick Search",
-  "version": "1.0",
+  "version": "1.0.1",
   "description": "Quickly search your team's Confluence at the press of a button. ...also, adds the shortcut 'con' to the Chrome omnibox.",
   "manifest_version": 2,
   "short_name": "confluence-quick-search",
