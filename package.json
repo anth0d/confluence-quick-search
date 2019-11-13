@@ -8,7 +8,8 @@
     "build": "webpack --mode production",
     "clean": "rm -rf dist/",
     "watch": "webpack --mode production --watch",
-    "test": "jest"
+    "test": "jest",
+    "package": "./package.sh"
   },
   "repository": {
     "type": "git",
