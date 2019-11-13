@@ -1,4 +1,6 @@
-import './analytics';
+import './_ga';
+import { _gaq } from './analytics';
+import * as storage from './utils/data';
 
 const createResultElement = ({ name, space, resultLink }) => {
   const a = document.createElement('a');
@@ -6,6 +8,7 @@ const createResultElement = ({ name, space, resultLink }) => {
   a.href = resultLink;
   a.title = resultLink;
   a.target = `_blank`;
+  a.onclick = () => _gaq.push(['_trackEvent', 'searchresult', 'clicked']);
   const spanName = document.createElement('span');
   spanName.className = `search-result-name`;
   spanName.textContent = `${name}`;
@@ -31,6 +34,7 @@ const errorMessageElement = ({ siteLink }) => {
   a.href = siteLink;
   a.title = siteLink;
   a.target = `_blank`;
+  a.onclick = () => _gaq.push(['_trackEvent', 'searcherror', 'clicked']);
   preUrl.textContent = siteLink;
   a.appendChild(preUrl);
   pLink.appendChild(a);
@@ -44,7 +48,7 @@ const errorMessageElement = ({ siteLink }) => {
 
 let setupDiv, searchDiv;
 
-const showSetup = ({ site }) => {
+const showSetup = () => {
   setupDiv = setupDiv || document.getElementById('setup-container');
   searchDiv = searchDiv || document.getElementById('search-container');
 
@@ -53,18 +57,20 @@ const showSetup = ({ site }) => {
 
   const setupForm = document.getElementById('setup-form');
   const setupUrl = document.getElementById('setup-url') as HTMLInputElement;
-  if (site) {
-    setupUrl.value = site;
-  }
-  setupUrl.focus();
-  setupForm.onsubmit = function (event) {
-    event.preventDefault();
-    const confluenceUrl = setupUrl.value
-      .replace(new RegExp('^https?:\/\/'), '')
-      .replace(new RegExp('\/wiki.*$'), '');
-    setupUrl.value = confluenceUrl;
-    chrome.storage.sync.set({ confluenceUrl }, () => showSearch({ site: confluenceUrl }));
-  }
+
+  storage.getSiteUrl().then(siteUrl => {
+    setupUrl.value = siteUrl || '';
+    setupUrl.focus();
+    setupForm.onsubmit = function (event) {
+      event.preventDefault();
+      if (!setupUrl.value.match(new RegExp('^https?:\/\/'))) {
+        _gaq.push(['_trackEvent', 'setup', 'adjusted']);
+        setupUrl.value = `https://${setupUrl.value}`;
+      }
+      _gaq.push(['_trackEvent', 'setup', 'submitted']);
+      storage.saveSiteUrl(setupUrl.value).then(() => showSearch({ site: setupUrl.value }));
+    }
+  });
 }
 
 const showSearch = ({ site }) => {
@@ -79,19 +85,20 @@ const showSearch = ({ site }) => {
 
   // update span with contents of site URL
   const searchUrl = document.getElementById('search-url');
-  searchUrl.textContent = site;
+  searchUrl.textContent = site.replace(new RegExp('^https?:\/\/'), '');
 
   const searchForm = document.getElementById('search-form');
   const searchInput = document.getElementById('query');
   searchInput.focus();
   searchForm.onsubmit = function (event) {
     event.preventDefault();
+    _gaq.push(['_trackEvent', 'search', 'submitted']);
 
     const q = (document.getElementById('query') as HTMLInputElement).value;
-    // const newTabUrl = `https://${site}/wiki/dosearchsite.action?queryString=${encodeURIComponent(q)}`;
+    // const newTabUrl = `${site}/dosearchsite.action?queryString=${encodeURIComponent(q)}`;
     // chrome.tabs.create({ url: newTabUrl });
-    // const searchUrl = `https://${site}/wiki/rest/quicknav/1/search?query=${encodeURIComponent(q)}`;
-    const searchUrl = `https://${site}/wiki/rest/api/search?cql=siteSearch+~+${encodeURIComponent(`"${q}"`)}`;
+    // const searchUrl = `${site}/rest/quicknav/1/search?query=${encodeURIComponent(q)}`;
+    const searchUrl = `${site}/rest/api/search?cql=siteSearch+~+${encodeURIComponent(`"${q}"`)}`;
     const resultsContainer = document.getElementById('results-container');
     resultsContainer.innerText = 'Searching...';
     const xhr = new XMLHttpRequest();
@@ -100,21 +107,24 @@ const showSearch = ({ site }) => {
       if (xhr.readyState === 4) {
         resultsContainer.innerText = '';
         if (xhr.status !== 200) {
+          _gaq.push(['_trackEvent', 'search', 'failed']);
           // probably not authenticated or URL is incorrect. Display error message:
-          resultsContainer.appendChild(errorMessageElement({ siteLink: `https://${site}/wiki` }));
+          resultsContainer.appendChild(errorMessageElement({ siteLink: `${site}` }));
           return;
         }
         const resp = JSON.parse(xhr.responseText);
         // const pages = resp.contentNameMatches[0];
         const pages = resp.results;
+        _gaq.push(['_trackEvent', 'searchresult', 'shown']);
         for (let result of pages) {
           resultsContainer.appendChild(createResultElement({
             name: result.content.title,
             space: result.resultGlobalContainer.title,
-            resultLink: `https://${site}/wiki${result.url}`
+            resultLink: `${site}${result.url}`
           }));
         }
         if (!pages || pages.length === 0) {
+          _gaq.push(['_trackEvent', 'searchresult', 'empty']);
           resultsContainer.innerHTML = '<em>No results</em>';
           return;
         }
@@ -125,14 +135,10 @@ const showSearch = ({ site }) => {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  chrome.storage.sync.get('confluenceUrl', function (data) {
-    console.log('data.confluenceUrl', data.confluenceUrl);
-    if (!data.confluenceUrl) {
-      showSetup({ site: null });
-    } else {
-      const setupButton = document.getElementById('show-setup');
-      setupButton.onclick = () => showSetup({ site: data.confluenceUrl });
-      showSearch({ site: data.confluenceUrl });
-    }
-  });
+  _gaq.push(['_trackEvent', 'searchpopup', 'clicked']);
+  storage.getSiteUrl().then(siteUrl => {
+    const setupButton = document.getElementById('show-setup');
+    setupButton.onclick = () => showSetup();
+    showSearch({ site: siteUrl });
+  }).catch(() => showSetup());
 });

@@ -1,18 +1,22 @@
-import './analytics';
+import './_ga';
+import { _gaq } from './analytics';
+import { getSiteUrl } from './utils/data';
 
 chrome.runtime.onInstalled.addListener(function () {
-  console.log('browsertime2');
+  _gaq.push(['_trackEvent', 'install']);
   chrome.omnibox.onInputEntered.addListener(function (text) {
-    console.log('browsertime3');
-    chrome.storage.sync.get('confluenceUrl', function (data) {
-      if (!data.confluenceUrl) {
+    getSiteUrl().then(siteUrl => {
+      if (!siteUrl) {
+        _gaq.push(['_trackEvent', 'omnibox', 'failure']);
         alert('Click the extension and set a Confluence URL');
         return;
       } else {
-        chrome.tabs.create({ url: `https://${data.confluenceUrl}/wiki/dosearchsite.action?queryString=${encodeURIComponent(text)}` });
+        _gaq.push(['_trackEvent', 'omnibox', 'success']);
+        chrome.tabs.create({ url: `${siteUrl}/dosearchsite.action?queryString=${encodeURIComponent(text)}` });
       }
     });
   });
+  _gaq.push(['_trackEvent', 'notification', 'shown']);
   chrome.notifications.create('new-install-notification', {
     type: 'basic',
     iconUrl: 'images/connie-128.png',
@@ -22,6 +26,7 @@ chrome.runtime.onInstalled.addListener(function () {
     requireInteraction: true
   }, (id) => {
     chrome.notifications.onClicked.addListener(() => {
+      _gaq.push(['_trackEvent', 'notification', 'clicked']);
       chrome.tabs.create({ url: 'chrome://extensions/shortcuts' }, ({ windowId }) => {
         chrome.windows.update(windowId, { focused: true }, () => {
           chrome.notifications.clear(id);
