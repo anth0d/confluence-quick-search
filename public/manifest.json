@@ -1,6 +1,6 @@
 {
   "name": "Confluence Quick Search",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Quickly search your team's Confluence at the press of a button. ...also, adds the shortcut 'con' to the Chrome omnibox.",
   "manifest_version": 2,
   "short_name": "confluence-quick-search",
@@ -9,8 +9,11 @@
     "storage",
     "https://*/"
   ],
+  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
   "background": {
-    "scripts": ["background.js"],
+    "scripts": [
+      "js/background.js"
+    ],
     "persistent": false
   },
   "browser_action": {
@@ -22,7 +25,9 @@
       "128": "images/connie-128.png"
     }
   },
-  "omnibox": { "keyword" : "con" },
+  "omnibox": {
+    "keyword": "con"
+  },
   "commands": {
     "_execute_browser_action": {
       "description": "Open Confluence Quick Search",
