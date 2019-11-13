@@ -1,6 +1,10 @@
-chrome.runtime.onInstalled.addListener(function() {
-  chrome.omnibox.onInputEntered.addListener(function(text) {   
-    chrome.storage.sync.get('confluenceUrl', function(data) {
+import './analytics';
+
+chrome.runtime.onInstalled.addListener(function () {
+  console.log('browsertime2');
+  chrome.omnibox.onInputEntered.addListener(function (text) {
+    console.log('browsertime3');
+    chrome.storage.sync.get('confluenceUrl', function (data) {
       if (!data.confluenceUrl) {
         alert('Click the extension and set a Confluence URL');
         return;

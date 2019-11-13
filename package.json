@@ -1,0 +1,42 @@
+{
+  "name": "chrome-confluence-search",
+  "version": "1.1.0",
+  "description": "Quickly search your team documentation at the press of a button",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "build": "webpack --mode production",
+    "clean": "rm -rf dist/",
+    "watch": "webpack --mode development --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anth0d/chrome-confluence-search.git"
+  },
+  "keywords": [
+    "confluence",
+    "typescript"
+  ],
+  "author": "Anthony Davis (@anth0d)",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/anth0d/chrome-confluence-search/issues"
+  },
+  "homepage": "https://github.com/anth0d/chrome-confluence-search#readme",
+  "devDependencies": {
+    "@types/chrome": "0.0.91",
+    "@types/google.analytics": "0.0.40",
+    "@types/jest": "^24.0.22",
+    "@types/node": "^12.12.7",
+    "@types/webpack": "^4.39.8",
+    "copy-webpack-plugin": "^5.0.5",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
+    "ts-loader": "^6.2.1",
+    "ts-node": "^8.5.0",
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}

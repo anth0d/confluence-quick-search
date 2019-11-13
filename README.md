@@ -9,11 +9,11 @@ Super fast search of your team's Confluence pages, by key command or by omnibox 
 # Example
 
 
-![popup example](images/demo-1.png)
+![popup example](docs/demo-1.png)
 *Click the Confluence icon, or use a hotkey to start a quick search*
 
 
-![omnibox example](images/demo-2.png)
+![omnibox example](docs/demo-2.png)
 *Type `con ` and press space in a new tab to use the search shortcut.*
 
 
