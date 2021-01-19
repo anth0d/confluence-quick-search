@@ -1,7 +1,7 @@
 import { _gaq } from '../analytics';
 
 export const saveSiteUrl = async (siteUrl) => {
-  return new Promise(resolve => {
+  return new Promise<void>(resolve => {
     chrome.storage.sync.set({ siteUrl }, resolve);
   });
 };

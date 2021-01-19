@@ -2,7 +2,7 @@ import './_ga';
 import { _gaq } from './analytics';
 import { getSiteUrl } from './utils/data';
 
-chrome.runtime.onInstalled.addListener(function () {
+chrome.runtime.onInstalled.addListener(function (details: chrome.runtime.InstalledDetails) {
   _gaq.push(['_trackEvent', 'install']);
   chrome.omnibox.onInputEntered.addListener(function (text) {
     getSiteUrl().then(siteUrl => {
@@ -16,6 +16,10 @@ chrome.runtime.onInstalled.addListener(function () {
       }
     });
   });
+  if (details.reason !== 'install') {
+    // no need to show notification
+    return;
+  }
   _gaq.push(['_trackEvent', 'notification', 'shown']);
   chrome.notifications.create('new-install-notification', {
     type: 'basic',
@@ -30,7 +34,6 @@ chrome.runtime.onInstalled.addListener(function () {
       chrome.tabs.create({ url: 'chrome://extensions/shortcuts' }, ({ windowId }) => {
         chrome.windows.update(windowId, { focused: true }, () => {
           chrome.notifications.clear(id);
-          // yodawg I heard you like callbacks
         });
       });
     });
