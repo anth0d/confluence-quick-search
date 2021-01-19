@@ -8,7 +8,6 @@ if ! [[ -x "$(command -v jq)" ]]; then
   exit 1
 fi
 
-# todo: detect if jq missing
 PKG_V=$(cat package.json | jq -r .version)
 MAN_V=$(cat public/manifest.json | jq -r .version)
 if [[ $PKG_V != $MAN_V ]]; then
