@@ -15,14 +15,15 @@ module.exports = {
   extends: [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended",
   ],
-  plugins: [
-    "react-hooks",
-  ],
+  ignorePatterns: ["dist/*", "node_modules/*"],
+  plugins: ["react-hooks"],
   rules: {
     "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
-    "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
+    "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
-  }
+  },
 };

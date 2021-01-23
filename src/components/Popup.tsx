@@ -1,11 +1,11 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from "react";
 
-import Modal from './Modal';
-import './Popup.css';
-import Search from './Search';
-import TextInput from './TextInput';
+import Modal from "./Modal";
+import "./Popup.css";
+import Search from "./Search";
+import TextInput from "./TextInput";
 
-import * as storage from '../utils/data';
+import * as storage from "../utils/data";
 
 function Popup(): ReactElement {
   const [loaded, setLoaded] = useState(false);
@@ -13,8 +13,9 @@ function Popup(): ReactElement {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    storage.getSiteUrl()
-      .then(url => setSiteUrl(url))
+    storage
+      .getSiteUrl()
+      .then((url) => setSiteUrl(url))
       .then(() => setLoaded(true));
   }, [modalVisible]); // re-fetch when modal closed
 
@@ -25,12 +26,14 @@ function Popup(): ReactElement {
   }, [loaded, siteUrl]);
 
   return (
-    <div style={{
-      width: '300px',
-      height: '400px',
-      margin: '20px 20px 10px 20px',
-      padding: '0',
-    }}>
+    <div
+      style={{
+        width: "300px",
+        height: "400px",
+        margin: "20px 20px 10px 20px",
+        padding: "0",
+      }}
+    >
       <Modal
         visible={modalVisible}
         onClickOutside={() => {
@@ -38,9 +41,11 @@ function Popup(): ReactElement {
           setModalVisible(!siteUrl);
         }}
       >
-        <div style={{
-          padding: '20px 20px 10px 20px',
-        }}>
+        <div
+          style={{
+            padding: "20px 20px 10px 20px",
+          }}
+        >
           <p>
             <label>
               Your Confluence URL
@@ -56,15 +61,21 @@ function Popup(): ReactElement {
               />
             </label>
           </p>
-            {/* <p><button type="submit">Save</button></p> */}
+          {/* <p><button type="submit">Save</button></p> */}
         </div>
       </Modal>
 
       <Search siteUrl={siteUrl} />
 
       <em>
-        <span>{siteUrl ? `Searching ${siteUrl} ` : 'Site URL not set. '}</span>
-        <span>(<a href="#" onClick={() => setModalVisible(true)}>Change?</a>)</span>
+        <span>{siteUrl ? `Searching ${siteUrl} ` : "Site URL not set. "}</span>
+        <span>
+          (
+          <a href="#" onClick={() => setModalVisible(true)}>
+            Change?
+          </a>
+          )
+        </span>
       </em>
     </div>
   );

@@ -1,6 +1,6 @@
-import { ok, err, Result } from 'neverthrow';
+import { ok, err, Result } from "neverthrow";
 
-import { SearchResultProps } from '../components/SearchResult';
+import { SearchResultProps } from "../components/SearchResult";
 
 export enum ErrorCondition {
   NoError,
@@ -9,7 +9,10 @@ export enum ErrorCondition {
   NotFound,
 }
 
-export const searchRequest = async (BASE_URL: string, search: string): Promise<Result<SearchResultProps[], ErrorCondition>> => {
+export const searchRequest = async (
+  BASE_URL: string,
+  search: string,
+): Promise<Result<SearchResultProps[], ErrorCondition>> => {
   try {
     const searchUrl = `${BASE_URL}/rest/api/search?cql=siteSearch+~+${encodeURIComponent(`"${search}"`)}`;
     const response = await fetch(searchUrl);

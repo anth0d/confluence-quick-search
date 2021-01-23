@@ -14,7 +14,7 @@ function Modal(props: React.PropsWithChildren<ModalProps>): ReactElement {
     if (!visible) {
       return;
     }
-    const handler = evt => {
+    const handler = (evt) => {
       if (ref.current && !ref.current.contains(evt.target)) {
         onClickOutside();
       }
@@ -30,24 +30,29 @@ function Modal(props: React.PropsWithChildren<ModalProps>): ReactElement {
   }
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: '0',
-      left: '0',
-      width: '100%',
-      height: '100%',
-      background: 'rgba(0, 0, 0, 0.6)',
-    }}>
-      <div ref={ref} style={{
-        position: 'fixed',
-        background: 'white',
-        width: '80%',
-        height: 'auto',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-      }}>
-        { props.children }
+    <div
+      style={{
+        position: "fixed",
+        top: "0",
+        left: "0",
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+      }}
+    >
+      <div
+        ref={ref}
+        style={{
+          position: "fixed",
+          background: "white",
+          width: "80%",
+          height: "auto",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        {props.children}
       </div>
     </div>
   );
