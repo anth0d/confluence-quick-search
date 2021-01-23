@@ -56,6 +56,9 @@ const showSetup = () => {
   setupDiv.hidden = false;
 
   const setupForm = document.getElementById('setup-form');
+  if (!setupForm) {
+    throw new Error('missing setupForm');
+  }
   const setupUrl = document.getElementById('setup-url') as HTMLInputElement;
 
   storage.getSiteUrl().then(siteUrl => {
@@ -85,10 +88,19 @@ const showSearch = ({ site }) => {
 
   // update span with contents of site URL
   const searchUrl = document.getElementById('search-url');
+  if (!searchUrl) {
+    throw new Error('missing searchUrl');
+  }
   searchUrl.textContent = site.replace(new RegExp('^https?:\/\/'), '');
 
   const searchForm = document.getElementById('search-form');
+  if (!searchForm) {
+    throw new Error('missing searchForm');
+  }
   const searchInput = document.getElementById('query');
+  if (!searchInput) {
+    throw new Error('missing searchInput');
+  }
   searchInput.focus();
   searchForm.onsubmit = function (event) {
     event.preventDefault();
@@ -100,6 +112,9 @@ const showSearch = ({ site }) => {
     // const searchUrl = `${site}/rest/quicknav/1/search?query=${encodeURIComponent(q)}`;
     const searchUrl = `${site}/rest/api/search?cql=siteSearch+~+${encodeURIComponent(`"${q}"`)}`;
     const resultsContainer = document.getElementById('results-container');
+    if (!resultsContainer) {
+      throw new Error('missing resultsContainer');
+    }
     resultsContainer.innerText = 'Searching...';
     const xhr = new XMLHttpRequest();
     xhr.open("GET", searchUrl, true);
@@ -116,7 +131,7 @@ const showSearch = ({ site }) => {
         // const pages = resp.contentNameMatches[0];
         const pages = resp.results;
         _gaq.push(['_trackEvent', 'searchresult', 'shown']);
-        for (let result of pages) {
+        for (const result of pages) {
           resultsContainer.appendChild(createResultElement({
             name: result.content.title,
             space: result.resultGlobalContainer.title,
@@ -138,6 +153,9 @@ document.addEventListener('DOMContentLoaded', function () {
   _gaq.push(['_trackEvent', 'searchpopup', 'clicked']);
   storage.getSiteUrl().then(siteUrl => {
     const setupButton = document.getElementById('show-setup');
+    if (!setupButton) {
+      throw new Error('missing setupButton');
+    }
     setupButton.onclick = () => showSetup();
     showSearch({ site: siteUrl });
   }).catch(() => showSetup());

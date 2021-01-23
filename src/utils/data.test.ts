@@ -1,10 +1,20 @@
 import { getSiteUrl } from './data';
 
-const setup = ({ sOutput, cOutput }) => {
-  (global as any).chrome = {
+interface Extension {
+  chrome: {
     storage: {
       sync: {
-        get: (key: string, cb: any) => {
+        get: (key: string, callback: (any) => void) => void
+      }
+    }
+  }
+}
+
+const setup = ({ sOutput, cOutput }) => {
+  (global as Extension).chrome = {
+    storage: {
+      sync: {
+        get: (key: string, cb: (any) => void) => {
           switch (key) {
             case 'siteUrl':
               cb({ siteUrl: sOutput });

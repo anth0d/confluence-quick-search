@@ -2,7 +2,7 @@ import './_ga';
 import { _gaq } from './analytics';
 import { getSiteUrl } from './utils/data';
 
-chrome.runtime.onInstalled.addListener(function (details: chrome.runtime.InstalledDetails) {
+const installHandler = (details: chrome.runtime.InstalledDetails): void => {
   _gaq.push(['_trackEvent', 'install']);
   chrome.omnibox.onInputEntered.addListener(function (text) {
     getSiteUrl().then(siteUrl => {
@@ -38,4 +38,8 @@ chrome.runtime.onInstalled.addListener(function (details: chrome.runtime.Install
       });
     });
   });
-});
+};
+
+if (!chrome.runtime.onInstalled.hasListener(installHandler)) {
+  chrome.runtime.onInstalled.addListener(installHandler);
+}

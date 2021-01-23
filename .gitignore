@@ -1,4 +1,7 @@
 dist/
 node_modules/
+tmp/
 .DS_Store
+.eslintcache
 package-lock.json
+TODO.*

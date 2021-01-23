@@ -14,6 +14,10 @@
     "noEmitOnError": true,
     "typeRoots": [
       "node_modules/@types"
-    ]
-  }
+    ],
+    "jsx": "react"
+  },
+  "include": [
+    "src"
+  ]
 }
