@@ -1,27 +1,28 @@
 import React, { ReactElement, useEffect, useState } from 'react';
+
 import Modal from './Modal';
-import SearchInput from './SearchInput';
+import './Popup.css';
+import Search from './Search';
+import TextInput from './TextInput';
 
 import * as storage from '../utils/data';
 
-import './Popup.css';
-
 function Popup(): ReactElement {
+  const [loaded, setLoaded] = useState(false);
   const [siteUrl, setSiteUrl] = useState(null);
-  const [settingsVisible, setSettingsVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    storage.getSiteUrl().then(setSiteUrl);
-  }, [settingsVisible]); // re-fetch when modal closed
+    storage.getSiteUrl()
+      .then(url => setSiteUrl(url))
+      .then(() => setLoaded(true));
+  }, [modalVisible]); // re-fetch when modal closed
 
-  const closeModal = () => setSettingsVisible(false);
-  const openModal = () => setSettingsVisible(true);
-
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-    storage.saveSiteUrl(siteUrl);
-    closeModal();
-  };
+  useEffect(() => {
+    if (loaded && !siteUrl) {
+      setModalVisible(true);
+    }
+  }, [loaded, siteUrl]);
 
   return (
     <div style={{
@@ -31,39 +32,40 @@ function Popup(): ReactElement {
       padding: '0',
     }}>
       <Modal
-        visible={settingsVisible}
-        onClickOutside={closeModal}
+        visible={modalVisible}
+        onClickOutside={() => {
+          // keep modal shown until siteUrl set
+          setModalVisible(!siteUrl);
+        }}
       >
         <div style={{
           padding: '20px 20px 10px 20px',
         }}>
-          <form onSubmit={handleSubmit}>
-            <p>
-              <label>
-                Your Confluence URL
-                <input
-                  placeholder="https://myteam.atlassian.net/wiki"
-                  style={{ width: '95%' }}
-                  type="text"
-                  value={siteUrl}
-                  onChange={e => setSiteUrl(e.target.value)}
-                />
-              </label>
-            </p>
-            <p><button type="submit">Save</button></p>
-          </form>
+          <p>
+            <label>
+              Your Confluence URL
+              <TextInput
+                initialValue={siteUrl}
+                onSubmit={(url) => {
+                  storage.saveSiteUrl(url);
+                  setModalVisible(false);
+                }}
+                placeholder="https://myteam.atlassian.net/wiki"
+                small
+                withOutline
+              />
+            </label>
+          </p>
+            {/* <p><button type="submit">Save</button></p> */}
         </div>
       </Modal>
 
-      <SearchInput
-        placeholder="Search Confluence..."
-        siteUrl={siteUrl}
-      />
-      <em>
-        <span>{siteUrl ? `Searching ${siteUrl} ` : 'Site URL not configured. '}</span>
-        <span>(<a href="#" onClick={openModal}>Change?</a>)</span>
-      </em>
+      <Search siteUrl={siteUrl} />
 
+      <em>
+        <span>{siteUrl ? `Searching ${siteUrl} ` : 'Site URL not set. '}</span>
+        <span>(<a href="#" onClick={() => setModalVisible(true)}>Change?</a>)</span>
+      </em>
     </div>
   );
 }
