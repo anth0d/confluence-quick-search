@@ -8,7 +8,17 @@ export type SearchResultProps = {
   resultLink: string;
 };
 
-export function mapSearchResults(list: SearchResultProps[]): ReactElement {
+export function mapSearchResults(list?: SearchResultProps[]): ReactElement {
+  if (!list) {
+    return <></>;
+  }
+  if (list.length === 0) {
+    return (
+      <p>
+        <em>No results</em>
+      </p>
+    );
+  }
   return (
     <>
       {list.map((r: SearchResultProps, i: number) => {

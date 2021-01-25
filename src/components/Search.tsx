@@ -12,7 +12,7 @@ type SearchProps = {
 };
 
 export default function Search(props: SearchProps): ReactElement {
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState(null);
   const [searchError, setSearchError] = useState(null);
 
   const submit = (query: string) => {

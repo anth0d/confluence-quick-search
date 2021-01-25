@@ -7,7 +7,6 @@ module.exports = {
   devtool: "cheap-module-source-map",
   entry: {
     background: path.join(__dirname, "./src/", "background.ts"),
-    search: path.join(__dirname, "./src/", "search.ts"),
     main: path.join(__dirname, "./src/", "index.tsx"),
   },
   output: {
@@ -49,7 +48,7 @@ module.exports = {
       Object.assign(
         {},
         {
-          excludeChunks: ["background", "search"],
+          excludeChunks: ["background"],
           inject: true,
           template: "public/index.html",
         },

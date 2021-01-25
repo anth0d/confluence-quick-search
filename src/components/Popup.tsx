@@ -58,11 +58,12 @@ function Popup(): ReactElement {
               <TextInput
                 initialValue={siteUrl}
                 onSubmit={(url) => {
-                  if (!url.match(new RegExp("^https?://"))) {
+                  if (url === "" || url.match(new RegExp("^https?://"))) {
+                    storage.saveSiteUrl(url);
+                  } else {
+                    // prepend https?://
                     _gaq.push(["_trackEvent", "setup", "adjusted"]);
                     storage.saveSiteUrl(`https://${url}`);
-                  } else {
-                    storage.saveSiteUrl(url);
                   }
                   setModalVisible(false);
                   _gaq.push(["_trackEvent", "setup", "submitted"]);
