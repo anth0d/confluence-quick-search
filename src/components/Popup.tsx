@@ -5,12 +5,18 @@ import "./Popup.css";
 import Search from "./Search";
 import TextInput from "./TextInput";
 
+import "../_ga";
+import { _gaq } from "../analytics";
 import * as storage from "../utils/data";
 
 function Popup(): ReactElement {
   const [loaded, setLoaded] = useState(false);
   const [siteUrl, setSiteUrl] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    _gaq.push(["_trackEvent", "searchpopup", "clicked"]);
+  }, []);
 
   useEffect(() => {
     storage
@@ -46,21 +52,27 @@ function Popup(): ReactElement {
             padding: "20px 20px 10px 20px",
           }}
         >
-          <p>
+          <div style={{ display: "block" }}>
             <label>
               Your Confluence URL
               <TextInput
                 initialValue={siteUrl}
                 onSubmit={(url) => {
-                  storage.saveSiteUrl(url);
+                  if (!url.match(new RegExp("^https?://"))) {
+                    _gaq.push(["_trackEvent", "setup", "adjusted"]);
+                    storage.saveSiteUrl(`https://${url}`);
+                  } else {
+                    storage.saveSiteUrl(url);
+                  }
                   setModalVisible(false);
+                  _gaq.push(["_trackEvent", "setup", "submitted"]);
                 }}
                 placeholder="https://myteam.atlassian.net/wiki"
                 small
                 withOutline
               />
             </label>
-          </p>
+          </div>
           {/* <p><button type="submit">Save</button></p> */}
         </div>
       </Modal>
@@ -71,7 +83,13 @@ function Popup(): ReactElement {
         <span>{siteUrl ? `Searching ${siteUrl} ` : "Site URL not set. "}</span>
         <span>
           (
-          <a href="#" onClick={() => setModalVisible(true)}>
+          <a
+            href="#"
+            onClick={() => {
+              setModalVisible(true);
+              _gaq.push(["_trackEvent", "setup", "clicked"]);
+            }}
+          >
             Change?
           </a>
           )

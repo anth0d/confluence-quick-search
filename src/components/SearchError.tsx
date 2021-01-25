@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 
+import { _gaq } from "../analytics";
 import { ErrorCondition } from "../utils/search";
 
 type SearchErrorProps = {
@@ -14,13 +15,13 @@ export default function SearchError(props: SearchErrorProps): ReactElement {
   switch (error) {
     case ErrorCondition.Default:
       message =
-        "Error! Check that this URL is correct. Include https:// and /wiki if missing. Then, visit your Confluence site and log in.";
+        "Error! Check that this is the correct Confluence URL. (Include /wiki if needed.) Then, visit your Confluence site and log in.";
       break;
     case ErrorCondition.Unauthenticated:
       message = "Error! Visit your site and log in.";
       break;
     case ErrorCondition.NotFound:
-      message = "Error! Check for errors in your URL. Include https:// and /wiki if missing. Then, retry search.";
+      message = "Error! Check that this is the correct Confluence URL. (Include /wiki if needed.) Then, retry search.";
       break;
   }
 
@@ -42,7 +43,7 @@ export default function SearchError(props: SearchErrorProps): ReactElement {
           title={siteUrl}
           rel="noreferrer"
           target="_blank"
-          // onClick={_gaq.push([])}
+          onClick={() => _gaq.push(["_trackEvent", "searcherror", "clicked"])}
         >
           {siteUrl}
         </a>

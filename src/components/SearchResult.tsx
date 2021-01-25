@@ -1,5 +1,7 @@
 import React, { ReactElement } from "react";
 
+import { _gaq } from "../analytics";
+
 export type SearchResultProps = {
   name: string;
   space: string;
@@ -34,7 +36,7 @@ export default function SearchResult(props: SearchResultProps): ReactElement {
           margin: "0em",
           font: "400 11px system-ui",
         }}
-        // onClick={() => _gaq.push[]}
+        onClick={() => _gaq.push(["_trackEvent", "searchresult", "clicked"])}
       >
         <span
           style={{
