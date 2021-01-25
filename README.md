@@ -2,8 +2,6 @@
 
 Super fast search of your team's Confluence pages, by key command or by omnibox (that's what Google calls the address bar in Chrome)
 
-#TL;DR I want it
-
 ## Install it via [Chrome Web Store](https://chrome.google.com/webstore/detail/confluence-quick-search/gimcmmlpmjffkpbomagapjhdfbbeldfk)
 
 # Example

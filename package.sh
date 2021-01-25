@@ -17,8 +17,15 @@ if [[ $PKG_V != $MAN_V ]]; then
 fi
 
 npm run clean
+npm run lint
 npm run test
 npm run build
+
+# cd dist/
+# INLINE_RUNTIME_CHUNK=false npm run rsbuild
+# cd build/
+# BACKGROUND_JS="$(find static -type f -iname "3.*.js" | tr -d '\n')"
+# sed -i '' -e "s#static/js/background.js#${BACKGROUND_JS}#g" manifest.json
 
 PACKAGE="chrome-confluence-search-${MAN_V}"
 
