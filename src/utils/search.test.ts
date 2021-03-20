@@ -26,6 +26,16 @@ test("happy path search", async () => {
           excerpt: "Lorem ipsum",
           url: expected.resultLink.replace(BASE_URL, ""),
         },
+        // unusable result often included from Confluence API
+        // expected to be filtered out by the response handler
+        {
+          resultGlobalContainer: {
+            title: expected.space,
+          },
+          title: expected.name,
+          excerpt: "Not a good result",
+          url: expected.resultLink.replace(BASE_URL, ""),
+        },
       ],
     }),
     { status: 200 },
@@ -74,7 +84,7 @@ test("default error", async () => {
 
 test("no uncaught exception", async () => {
   const BASE_URL = "http://fake";
-  const err = new Error("oops");
+  const err = new Error("(intentional test error)");
   fetchMock.mockRejectOnce(err);
   const result = await searchRequest(BASE_URL, "foo");
   expect(result.isErr()).toBeTruthy();

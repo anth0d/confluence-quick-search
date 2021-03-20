@@ -28,14 +28,17 @@ export const searchRequest = async (
     const { results } = await response.json();
     const pages: SearchResultProps[] = [];
     for (const result of results) {
-      pages.push({
-        name: result.content.title,
-        space: result.resultGlobalContainer.title,
-        resultLink: `${BASE_URL}${result.url}`,
-      });
+      if (result.content) {
+        pages.push({
+          name: result.content.title,
+          space: result.resultGlobalContainer?.title,
+          resultLink: `${BASE_URL}${result.url}`,
+        });
+      }
     }
     return ok(pages);
   } catch (fetchError) {
+    console.dir(fetchError);
     return err(ErrorCondition.Default);
   }
 };
