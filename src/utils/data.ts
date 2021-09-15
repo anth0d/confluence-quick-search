@@ -9,10 +9,17 @@ export const saveSiteUrl = async (siteUrl: string): Promise<void> => {
 export const getSiteUrl = async (): Promise<string> => {
   const url = await getString("siteUrl");
   if (url) {
-    return url;
+    if (url.endsWith("/")) {
+      // emit a metric to help avoid breaking things in the future
+      _gaq.push(["_trackEvent", "data", "siteUrlTrailingSlash"]);
+    }
+    // trim trailing slash if present
+    return url.replace(/\/$/, "");
   }
   const fallback = await getString("confluenceUrl");
   if (fallback) {
+    // emit a metric to help avoid breaking things in the future
+    _gaq.push(["_trackEvent", "data", "confluenceUrlExists"]);
     return `https://${fallback}/wiki`;
   }
   // default

@@ -5,16 +5,20 @@ import { getSiteUrl } from "./utils/data";
 const installHandler = (details: chrome.runtime.InstalledDetails): void => {
   _gaq.push(["_trackEvent", "install"]);
   chrome.omnibox.onInputEntered.addListener(function (text) {
-    getSiteUrl().then((siteUrl) => {
-      if (!siteUrl) {
-        _gaq.push(["_trackEvent", "omnibox", "failure"]);
-        alert("Click the extension and set a Confluence URL");
-        return;
-      } else {
-        _gaq.push(["_trackEvent", "omnibox", "success"]);
-        chrome.tabs.create({ url: `${siteUrl}/dosearchsite.action?queryString=${encodeURIComponent(text)}` });
-      }
-    });
+    getSiteUrl()
+      .then((siteUrl) => {
+        if (!siteUrl) {
+          _gaq.push(["_trackEvent", "omnibox", "alert"]);
+          alert("Click the extension and set a Confluence URL");
+        } else {
+          _gaq.push(["_trackEvent", "omnibox", "success"]);
+          chrome.tabs.create({ url: `${siteUrl}/dosearchsite.action?queryString=${encodeURIComponent(text)}` });
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        _gaq.push(["_trackEvent", "omnibox", "error"]);
+      });
   });
   if (details.reason !== "install") {
     // no need to show notification

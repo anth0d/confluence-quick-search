@@ -41,8 +41,8 @@ module.exports = {
     extensions: [".ts", ".tsx", ".js"],
   },
   plugins: [
-    new CopyPlugin([{ from: ".", to: "." }], {
-      context: "public",
+    new CopyPlugin({
+      patterns: [{ from: ".", to: ".", context: "public" }],
     }),
     new HtmlWebpackPlugin(
       Object.assign(
