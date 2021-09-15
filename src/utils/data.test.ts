@@ -47,4 +47,9 @@ describe("getSiteUrl", () => {
     setup({ sOutput: "https://mysite.com/confluence", cOutput: "sdf" });
     expect(await getSiteUrl()).toBe("https://mysite.com/confluence");
   });
+
+  test("existing url with trailing slash", async () => {
+    setup({ sOutput: "https://mysite.com/wiki/", cOutput: "sdf" });
+    expect(await getSiteUrl()).toBe("https://mysite.com/wiki");
+  });
 });
