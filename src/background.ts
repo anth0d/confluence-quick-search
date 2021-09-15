@@ -8,15 +8,17 @@ const installHandler = (details: chrome.runtime.InstalledDetails): void => {
     getSiteUrl()
       .then((siteUrl) => {
         if (!siteUrl) {
-          _gaq.push(["_trackEvent", "omnibox", "failure"]);
+          _gaq.push(["_trackEvent", "omnibox", "alert"]);
           alert("Click the extension and set a Confluence URL");
-          return;
         } else {
           _gaq.push(["_trackEvent", "omnibox", "success"]);
           chrome.tabs.create({ url: `${siteUrl}/dosearchsite.action?queryString=${encodeURIComponent(text)}` });
         }
       })
-      .catch(console.dir);
+      .catch((err) => {
+        console.error(err);
+        _gaq.push(["_trackEvent", "omnibox", "error"]);
+      });
   });
   if (details.reason !== "install") {
     // no need to show notification
