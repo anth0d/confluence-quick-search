@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { getSiteUrl } from "./data";
 
 interface Extension {

@@ -29,6 +29,8 @@ Once you click the icon in Chrome, or activate the keyboard shortcut, you should
 # I want to hack on it
 
     git clone https://github.com/anth0d/chrome-confluence-search.git
+    cd chrome-confluence-search
+    npm install && npm build
     open chrome://extensions
     # click "LOAD UNPACKED"
-    # select the location you cloned into
+    # navigate to this repo, and select the "dist" folder
