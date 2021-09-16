@@ -1,6 +1,6 @@
 {
   "name": "chrome-confluence-search",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Quickly search your team documentation at the press of a button",
   "private": true,
   "scripts": {
