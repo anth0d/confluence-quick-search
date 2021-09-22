@@ -21,3 +21,18 @@ export const init = (trackingId: string): void => {
   _gaq.push(["_setAccount", trackingId]);
   _gaq.push(["_trackPageview"]);
 };
+
+export interface GAEvent {
+  category: string;
+  action?: string; // TODO: refactor this as part of event cleanup, should always be included
+  label?: string;
+  value?: string;
+}
+
+export const trackEvent = ({ category, action, label, value }: GAEvent): void => {
+  const event = ["_trackEvent", category];
+  if (action) event.push(action);
+  if (label) event.push(label);
+  if (value) event.push(value);
+  _gaq.push(event);
+};

@@ -4,7 +4,7 @@ import SearchError from "./SearchError";
 import { mapSearchResults } from "./SearchResult";
 import TextInput from "./TextInput";
 
-import { _gaq } from "../analytics";
+import { trackEvent } from "../analytics";
 import { searchRequest } from "../utils/search";
 
 type SearchProps = {
@@ -16,15 +16,15 @@ export default function Search(props: SearchProps): ReactElement {
   const [searchError, setSearchError] = useState(null);
 
   const submit = (query: string) => {
-    _gaq.push(["_trackEvent", "search", "submitted"]);
+    trackEvent({ category: "search", action: "submitted" });
     searchRequest(props.siteUrl, query).then((result) => {
       if (result.isErr()) {
-        _gaq.push(["_trackEvent", "search", "failed"]);
+        trackEvent({ category: "search", action: "failed" });
         return setSearchError(result.error);
       }
-      _gaq.push(["_trackEvent", "searchresult", "shown"]);
+      trackEvent({ category: "searchresult", action: "shown" });
       if (result.value.length === 0) {
-        _gaq.push(["_trackEvent", "searchresult", "empty"]);
+        trackEvent({ category: "searchresult", action: "empty" });
       }
       setSearchResults(result.value);
       setSearchError(null);

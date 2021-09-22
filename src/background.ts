@@ -1,14 +1,14 @@
 import "./_ga";
-import { _gaq } from "./analytics";
+import { trackEvent } from "./analytics";
 import { getSiteUrl } from "./utils/data";
 
 const installHandler = (details: chrome.runtime.InstalledDetails): void => {
-  _gaq.push(["_trackEvent", "install"]);
+  trackEvent({ category: "install" });
   if (details.reason !== "install") {
     // no need to show notification
     return;
   }
-  _gaq.push(["_trackEvent", "notification", "shown"]);
+  trackEvent({ category: "notification", action: "shown" });
   chrome.notifications.create(
     "new-install-notification",
     {
@@ -21,7 +21,7 @@ const installHandler = (details: chrome.runtime.InstalledDetails): void => {
     },
     (id) => {
       chrome.notifications.onClicked.addListener(() => {
-        _gaq.push(["_trackEvent", "notification", "clicked"]);
+        trackEvent({ category: "notification", action: "clicked" });
         chrome.tabs.create({ url: "chrome://extensions/shortcuts" }, ({ windowId }) => {
           chrome.windows.update(windowId, { focused: true }, () => {
             chrome.notifications.clear(id);
@@ -33,17 +33,17 @@ const installHandler = (details: chrome.runtime.InstalledDetails): void => {
 };
 
 const searchHandler = (text) => {
-  _gaq.push(["_trackEvent", "omnibox"]);
+  trackEvent({ category: "omnibox" });
   if (chrome.runtime.lastError) {
     console.error(chrome.runtime.lastError.message);
   }
   getSiteUrl()
     .then((siteUrl) => {
       if (!siteUrl) {
-        _gaq.push(["_trackEvent", "omnibox", "alert"]);
+        trackEvent({ category: "omnibox", action: "alert" });
         alert("Click the extension and set a Confluence URL");
       } else {
-        _gaq.push(["_trackEvent", "omnibox", "success"]);
+        trackEvent({ category: "omnibox", action: "success" });
         chrome.tabs.create({ url: `${siteUrl}/dosearchsite.action?queryString=${encodeURIComponent(text)}` }, () => {
           if (chrome.runtime.lastError) {
             console.error(chrome.runtime.lastError.message);
@@ -53,7 +53,7 @@ const searchHandler = (text) => {
     })
     .catch((err) => {
       console.error(err);
-      _gaq.push(["_trackEvent", "omnibox", "error"]);
+      trackEvent({ category: "omnibox", action: "error" });
     });
 };
 

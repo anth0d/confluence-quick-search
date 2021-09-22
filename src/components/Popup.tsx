@@ -6,7 +6,7 @@ import Search from "./Search";
 import TextInput from "./TextInput";
 
 import "../_ga";
-import { _gaq } from "../analytics";
+import { trackEvent } from "../analytics";
 import * as storage from "../utils/data";
 
 function Popup(): ReactElement {
@@ -15,7 +15,7 @@ function Popup(): ReactElement {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    _gaq.push(["_trackEvent", "searchpopup", "clicked"]);
+    trackEvent({ category: "searchpopup", action: "clicked" });
   }, []);
 
   useEffect(() => {
@@ -62,11 +62,11 @@ function Popup(): ReactElement {
                     storage.saveSiteUrl(url);
                   } else {
                     // prepend https?://
-                    _gaq.push(["_trackEvent", "setup", "adjusted"]);
+                    trackEvent({ category: "setup", action: "adjusted" });
                     storage.saveSiteUrl(`https://${url}`);
                   }
                   setModalVisible(false);
-                  _gaq.push(["_trackEvent", "setup", "submitted"]);
+                  trackEvent({ category: "setup", action: "submitted" });
                 }}
                 placeholder="https://myteam.atlassian.net/wiki"
                 small
@@ -88,7 +88,7 @@ function Popup(): ReactElement {
             href="#"
             onClick={() => {
               setModalVisible(true);
-              _gaq.push(["_trackEvent", "setup", "clicked"]);
+              trackEvent({ category: "setup", action: "clicked" });
             }}
           >
             Change?
