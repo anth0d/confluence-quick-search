@@ -38,7 +38,7 @@ export const searchRequest = async (
     }
     return ok(pages);
   } catch (fetchError) {
-    console.dir(fetchError);
+    console.error(fetchError);
     return err(ErrorCondition.Default);
   }
 };

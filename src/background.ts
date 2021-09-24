@@ -1,14 +1,14 @@
 import "./_ga";
-import { trackEvent } from "./analytics";
+import { Category, trackEvent } from "./analytics";
 import { getSiteUrl } from "./utils/data";
 
 const installHandler = (details: chrome.runtime.InstalledDetails): void => {
-  trackEvent({ category: "install" });
+  trackEvent({ category: Category.Setup, action: "install", label: details.reason });
   if (details.reason !== "install") {
     // no need to show notification
     return;
   }
-  trackEvent({ category: "notification", action: "shown" });
+  trackEvent({ category: Category.Notification, action: "shown" });
   chrome.notifications.create(
     "new-install-notification",
     {
@@ -21,7 +21,7 @@ const installHandler = (details: chrome.runtime.InstalledDetails): void => {
     },
     (id) => {
       chrome.notifications.onClicked.addListener(() => {
-        trackEvent({ category: "notification", action: "clicked" });
+        trackEvent({ category: Category.Notification, action: "clicked" });
         chrome.tabs.create({ url: "chrome://extensions/shortcuts" }, ({ windowId }) => {
           chrome.windows.update(windowId, { focused: true }, () => {
             chrome.notifications.clear(id);
@@ -33,18 +33,19 @@ const installHandler = (details: chrome.runtime.InstalledDetails): void => {
 };
 
 const searchHandler = (text) => {
-  trackEvent({ category: "omnibox" });
+  trackEvent({ category: Category.Omnibox, action: "submit" });
   if (chrome.runtime.lastError) {
     console.error(chrome.runtime.lastError.message);
   }
   getSiteUrl()
     .then((siteUrl) => {
       if (!siteUrl) {
-        trackEvent({ category: "omnibox", action: "alert" });
+        trackEvent({ category: Category.Omnibox, action: "alert" });
         alert("Click the extension and set a Confluence URL");
       } else {
-        trackEvent({ category: "omnibox", action: "success" });
+        trackEvent({ category: Category.Omnibox, action: "pending" });
         chrome.tabs.create({ url: `${siteUrl}/dosearchsite.action?queryString=${encodeURIComponent(text)}` }, () => {
+          trackEvent({ category: Category.Omnibox, action: "success" });
           if (chrome.runtime.lastError) {
             console.error(chrome.runtime.lastError.message);
           }
@@ -53,7 +54,7 @@ const searchHandler = (text) => {
     })
     .catch((err) => {
       console.error(err);
-      trackEvent({ category: "omnibox", action: "error" });
+      trackEvent({ category: Category.Omnibox, action: "error" });
     });
 };
 

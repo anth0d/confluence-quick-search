@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 
-import { trackEvent } from "../analytics";
+import { Category, trackEvent } from "../analytics";
 
 export type SearchResultProps = {
   name: string;
@@ -46,7 +46,7 @@ export default function SearchResult(props: SearchResultProps): ReactElement {
           margin: "0em",
           font: "400 11px system-ui",
         }}
-        onClick={() => trackEvent({ category: "searchresult", action: "clicked" })}
+        onClick={() => trackEvent({ category: Category.Popup, action: "result-clicked" })}
       >
         <span
           style={{

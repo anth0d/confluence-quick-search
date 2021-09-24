@@ -4,7 +4,7 @@ import SearchError from "./SearchError";
 import { mapSearchResults } from "./SearchResult";
 import TextInput from "./TextInput";
 
-import { trackEvent } from "../analytics";
+import { Category, trackEvent } from "../analytics";
 import { searchRequest } from "../utils/search";
 
 type SearchProps = {
@@ -16,15 +16,15 @@ export default function Search(props: SearchProps): ReactElement {
   const [searchError, setSearchError] = useState(null);
 
   const submit = (query: string) => {
-    trackEvent({ category: "search", action: "submitted" });
+    trackEvent({ category: Category.Popup, action: "search-submitted" });
     searchRequest(props.siteUrl, query).then((result) => {
       if (result.isErr()) {
-        trackEvent({ category: "search", action: "failed" });
+        trackEvent({ category: Category.Popup, action: "search-failed" });
         return setSearchError(result.error);
       }
-      trackEvent({ category: "searchresult", action: "shown" });
+      trackEvent({ category: Category.Popup, action: "result-shown" });
       if (result.value.length === 0) {
-        trackEvent({ category: "searchresult", action: "empty" });
+        trackEvent({ category: Category.Popup, action: "result-empty" });
       }
       setSearchResults(result.value);
       setSearchError(null);
