@@ -33,6 +33,10 @@ export const trackEvent = ({ category, action, label, value }: GAEvent): void =>
   const event = ["_trackEvent", category, action];
   if (label) event.push(label);
   if (value) event.push(value);
+  if (value && !label) {
+    console.error("label is missing. label required when using value");
+    return;
+  }
   _gaq.push(event);
 };
 
