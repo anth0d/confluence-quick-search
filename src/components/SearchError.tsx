@@ -1,6 +1,6 @@
 import React, { ReactElement } from "react";
 
-import { _gaq } from "../analytics";
+import { Category, trackEvent } from "../analytics";
 import { ErrorCondition } from "../utils/search";
 
 type SearchErrorProps = {
@@ -43,7 +43,7 @@ export default function SearchError(props: SearchErrorProps): ReactElement {
           title={siteUrl}
           rel="noreferrer"
           target="_blank"
-          onClick={() => _gaq.push(["_trackEvent", "searcherror", "clicked"])}
+          onClick={() => trackEvent({ category: Category.Popup, action: "click", label: "error" })}
         >
           {siteUrl}
         </a>

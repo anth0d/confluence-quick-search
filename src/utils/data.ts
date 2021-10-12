@@ -1,4 +1,4 @@
-import { _gaq } from "../analytics";
+import { Category, trackEvent } from "../analytics";
 
 export const saveSiteUrl = async (siteUrl: string): Promise<void> => {
   return new Promise<void>((resolve) => {
@@ -11,7 +11,7 @@ export const getSiteUrl = async (): Promise<string> => {
   if (url) {
     if (url.endsWith("/")) {
       // emit a metric to help avoid breaking things in the future
-      _gaq.push(["_trackEvent", "data", "siteUrlTrailingSlash"]);
+      trackEvent({ category: Category.Storage, action: "siteUrlTrailingSlash" });
     }
     // trim trailing slash if present
     return url.replace(/\/$/, "");
@@ -19,7 +19,7 @@ export const getSiteUrl = async (): Promise<string> => {
   const fallback = await getString("confluenceUrl");
   if (fallback) {
     // emit a metric to help avoid breaking things in the future
-    _gaq.push(["_trackEvent", "data", "confluenceUrlExists"]);
+    trackEvent({ category: Category.Storage, action: "confluenceUrlExists" });
     return `https://${fallback}/wiki`;
   }
   // default
@@ -33,7 +33,7 @@ export const getString = async (key: string): Promise<string> => {
       if (!data[key]) {
         return resolve("");
       }
-      _gaq.push(["_trackEvent", "data", key]);
+      trackEvent({ category: Category.Storage, action: key });
       return resolve(data[key]);
     });
   });
