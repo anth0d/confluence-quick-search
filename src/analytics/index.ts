@@ -1,7 +1,7 @@
 export const TRACKING_ID = "UA-152084023-1";
 
 export const _gaq = {
-  push: (args: string[]): void => {
+  push: (args: Array<string | number>): void => {
     window._gaq = window._gaq || ([] as GoogleAnalyticsCode);
     window._gaq.push(args);
   },
@@ -30,9 +30,9 @@ export interface GAEvent {
 }
 
 export const trackEvent = ({ category, action, label, value }: GAEvent): void => {
-  const event = ["_trackEvent", category, action];
+  const event: Array<string | number> = ["_trackEvent", category, action];
   if (label) event.push(label);
-  if (value) event.push(value);
+  if (value) event.push(parseInt(value));
   if (value && !label) {
     console.error("label is missing. label required when using value");
     return;
@@ -41,9 +41,9 @@ export const trackEvent = ({ category, action, label, value }: GAEvent): void =>
 };
 
 export enum Category {
+  Config = "config",
   Notification = "notification",
   Omnibox = "omnibox",
   Popup = "popup",
-  Setup = "setup",
   Storage = "storage",
 }

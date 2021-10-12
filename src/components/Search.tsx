@@ -16,15 +16,21 @@ export default function Search(props: SearchProps): ReactElement {
   const [searchError, setSearchError] = useState(null);
 
   const submit = (query: string) => {
-    trackEvent({ category: Category.Popup, action: "search-submitted" });
+    trackEvent({ category: Category.Popup, action: "submit" });
     searchRequest(props.siteUrl, query).then((result) => {
       if (result.isErr()) {
-        trackEvent({ category: Category.Popup, action: "search-failed" });
+        trackEvent({ category: Category.Popup, action: "error" });
         return setSearchError(result.error);
       }
-      trackEvent({ category: Category.Popup, action: "result-shown" });
       if (result.value.length === 0) {
-        trackEvent({ category: Category.Popup, action: "result-empty" });
+        trackEvent({ category: Category.Popup, action: "empty" });
+      } else {
+        trackEvent({
+          category: Category.Popup,
+          action: "success",
+          label: "results",
+          value: result.value.length.toString(),
+        });
       }
       setSearchResults(result.value);
       setSearchError(null);

@@ -46,7 +46,7 @@ export default function SearchResult(props: SearchResultProps): ReactElement {
           margin: "0em",
           font: "400 11px system-ui",
         }}
-        onClick={() => trackEvent({ category: Category.Popup, action: "result-clicked" })}
+        onClick={() => trackEvent({ category: Category.Popup, action: "click", label: "result" })}
       >
         <span
           style={{

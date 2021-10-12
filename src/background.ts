@@ -3,7 +3,7 @@ import { Category, trackEvent } from "./analytics";
 import { getSiteUrl } from "./utils/data";
 
 const installHandler = (details: chrome.runtime.InstalledDetails): void => {
-  trackEvent({ category: Category.Setup, action: "install", label: details.reason });
+  trackEvent({ category: Category.Config, action: "install", label: details.reason });
   if (details.reason !== "install") {
     // no need to show notification
     return;

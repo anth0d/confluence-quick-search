@@ -15,7 +15,7 @@ function Popup(): ReactElement {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    trackEvent({ category: Category.Popup, action: "clicked" });
+    trackEvent({ category: Category.Popup, action: "open" });
   }, []);
 
   useEffect(() => {
@@ -62,11 +62,11 @@ function Popup(): ReactElement {
                     storage.saveSiteUrl(url);
                   } else {
                     // prepend https?://
-                    trackEvent({ category: Category.Setup, action: "adjusted" });
+                    trackEvent({ category: Category.Config, action: "fixed" });
                     storage.saveSiteUrl(`https://${url}`);
                   }
                   setModalVisible(false);
-                  trackEvent({ category: Category.Setup, action: "submitted" });
+                  trackEvent({ category: Category.Config, action: "submit" });
                 }}
                 placeholder="https://myteam.atlassian.net/wiki"
                 small
@@ -88,7 +88,7 @@ function Popup(): ReactElement {
             href="#"
             onClick={() => {
               setModalVisible(true);
-              trackEvent({ category: Category.Setup, action: "clicked" });
+              trackEvent({ category: Category.Popup, action: "click", label: "config" });
             }}
           >
             Change?

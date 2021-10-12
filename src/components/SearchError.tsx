@@ -43,7 +43,7 @@ export default function SearchError(props: SearchErrorProps): ReactElement {
           title={siteUrl}
           rel="noreferrer"
           target="_blank"
-          onClick={() => trackEvent({ category: Category.Popup, action: "error-clicked" })}
+          onClick={() => trackEvent({ category: Category.Popup, action: "click", label: "error" })}
         >
           {siteUrl}
         </a>
