@@ -1,7 +1,8 @@
-dist/
-node_modules/
-tmp/
 .DS_Store
 .eslintcache
+confluence-quick-search*.zip
+dist/
+node_modules/
 package-lock.json
+tmp/
 TODO.*

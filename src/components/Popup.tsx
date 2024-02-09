@@ -1,18 +1,27 @@
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Modal from "./Modal";
 import "./Popup.css";
 import Search from "./Search";
 import TextInput from "./TextInput";
 
-import "../_ga";
 import { Category, trackEvent } from "../analytics";
-import * as storage from "../utils/data";
+import * as storage from "../storage";
 
-function Popup(): ReactElement {
+export default function Popup(): React.ReactElement {
   const [loaded, setLoaded] = useState(false);
   const [siteUrl, setSiteUrl] = useState(null);
+  const [shortcut, setShortcut] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    chrome.commands.getAll((commands) => {
+      // note: this assumes only one command is defined in manifest.json
+      if (commands.length !== 0 && commands[0].shortcut !== "") {
+        setShortcut(commands[0].shortcut.replace("Command", "⌘"));
+      }
+    });
+  }, []);
 
   useEffect(() => {
     trackEvent({ category: Category.Popup, action: "open" });
@@ -38,6 +47,9 @@ function Popup(): ReactElement {
         height: "400px",
         margin: "20px 20px 10px 20px",
         padding: "0",
+        flex: 1,
+        flexDirection: "column",
+        flexGrow: 1,
       }}
     >
       <Modal
@@ -80,24 +92,62 @@ function Popup(): ReactElement {
 
       <Search siteUrl={siteUrl} />
 
-      <em>
-        <span>{siteUrl ? `Searching ${siteUrl} ` : "Site URL not set. "}</span>
-        <span>
-          (
-          <a
-            href="#"
-            onClick={() => {
-              setModalVisible(true);
-              trackEvent({ category: Category.Popup, action: "click", label: "config" });
-            }}
-          >
-            Change?
-          </a>
-          )
-        </span>
-      </em>
+      {siteUrl && (
+        <div>
+          <p>
+            <em>
+              <span>
+                <span style={{ fontSize: "1.1em", fontFamily: "system-ui" }}>Searching {siteUrl} </span>(
+                <a
+                  href="#"
+                  title="Click to change your Confluence site."
+                  onClick={() => {
+                    setModalVisible(true);
+                    trackEvent({ category: Category.Popup, action: "click", label: "config" });
+                  }}
+                >
+                  Edit
+                </a>
+                )
+              </span>
+            </em>
+          </p>
+          <p>
+            <em>
+              <span>Shortcut: </span>
+            </em>
+            <span>
+              {shortcut ? (
+                <span
+                  style={{ fontSize: "1.1em", fontFamily: "system-ui" }}
+                  title="This is configured in your browser settings."
+                >
+                  {shortcut}
+                </span>
+              ) : (
+                <em>
+                  (
+                  <a
+                    href="chrome://extensions/shortcuts"
+                    title="This is configured in your browser settings."
+                    rel="noreferrer"
+                    target="_blank"
+                    onClick={() => {
+                      chrome.tabs.create({ url: "chrome://extensions/shortcuts" }, ({ windowId }) => {
+                        chrome.windows.update(windowId, { focused: true });
+                      });
+                    }}
+                  >
+                    Not set
+                  </a>
+                  )
+                </em>
+              )}
+            </span>
+          </p>
+          <br />
+        </div>
+      )}
     </div>
   );
 }
-
-export default Popup;

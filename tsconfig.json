@@ -8,7 +8,7 @@
     "target": "es6",
     "esModuleInterop": true,
     "noImplicitAny": false,
-    "sourceMap": false,
+    "sourceMap": true,
     "rootDir": "src",
     "outDir": "dist/js",
     "noEmitOnError": true,

@@ -1,6 +1,5 @@
-import "./_ga";
 import { Category, trackEvent } from "./analytics";
-import { getSiteUrl } from "./utils/data";
+import { getSiteUrl } from "./storage";
 
 const installHandler = (details: chrome.runtime.InstalledDetails): void => {
   trackEvent({ category: Category.Config, action: "install", label: details.reason });
@@ -8,28 +7,35 @@ const installHandler = (details: chrome.runtime.InstalledDetails): void => {
     // no need to show notification
     return;
   }
-  trackEvent({ category: Category.Notification, action: "shown" });
-  chrome.notifications.create(
-    "new-install-notification",
-    {
-      type: "basic",
-      iconUrl: "images/connie-128.png",
-      title: "Confluence Quick Search",
-      message: "Click me and set a hotkey...",
-      contextMessage: "Keyboard shortcut",
-      requireInteraction: true,
-    },
-    (id) => {
-      chrome.notifications.onClicked.addListener(() => {
-        trackEvent({ category: Category.Notification, action: "clicked" });
-        chrome.tabs.create({ url: "chrome://extensions/shortcuts" }, ({ windowId }) => {
-          chrome.windows.update(windowId, { focused: true }, () => {
-            chrome.notifications.clear(id);
-          });
-        });
-      });
-    },
-  );
+  // in fact, nobody wants to see the notification
+  // trackEvent({ category: Category.Notification, action: "shown" });
+  // chrome.notifications.create(
+  //   "new-install-notification",
+  //   {
+  //     type: "basic",
+  //     iconUrl: "images/connie-128.png",
+  //     title: "Confluence Quick Search",
+  //     message: "Click me and set a hotkey...",
+  //     contextMessage: "Keyboard shortcut",
+  //     requireInteraction: true,
+  //   },
+  //   (id) => {
+  //     if (chrome.runtime.lastError) {
+  //       console.error(chrome.runtime.lastError.message);
+  //     }
+  //     chrome.notifications.onClicked.addListener(() => {
+  //       if (chrome.runtime.lastError) {
+  //         console.error(chrome.runtime.lastError.message);
+  //       }
+  //       trackEvent({ category: Category.Notification, action: "clicked" });
+  //       chrome.tabs.create({ url: "chrome://extensions/shortcuts" }, ({ windowId }) => {
+  //         chrome.windows.update(windowId, { focused: true }, () => {
+  //           chrome.notifications.clear(id);
+  //         });
+  //       });
+  //     });
+  //   },
+  // );
 };
 
 const searchHandler = (text) => {
@@ -39,6 +45,9 @@ const searchHandler = (text) => {
   }
   getSiteUrl()
     .then((siteUrl) => {
+      if (chrome.runtime.lastError) {
+        console.error(chrome.runtime.lastError.message);
+      }
       if (!siteUrl) {
         trackEvent({ category: Category.Omnibox, action: "alert" });
         alert("Click the extension and set a Confluence URL");

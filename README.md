@@ -1,36 +1,52 @@
-# Confluence Search Chrome extension
+# confluence-quick-search
 
-Super fast search of your team's Confluence pages, by key command or by omnibox (that's what Google calls the address bar in Chrome)
+A cross-platform browser extension to make it easy to find information in your team's Confluence site.
+Super fast search of your team's Confluence pages, by key command or by omnibox (a.k.a. the address bar)
 
-## Install it via [Chrome Web Store](https://chrome.google.com/webstore/detail/confluence-quick-search/gimcmmlpmjffkpbomagapjhdfbbeldfk)
+## Install it:
 
-# Example
+- [Chrome Web Store](https://chrome.google.com/webstore/detail/confluence-quick-search/gimcmmlpmjffkpbomagapjhdfbbeldfk)
+- [Firefox Extensions](https://addons.mozilla.org/en-US/firefox/addon/confluence-quick-search/)
+- _Your preferred browser not listed? [Open an issue](https://github.com/anth0d/confluence-quick-search/issues/new) to request additional browser support._
 
+## Screenshots
 
-![popup example](docs/demo-1.png)
-*Click the Confluence icon, or use a hotkey to start a quick search*
+![popup example](docs/chrome.png)
+_Click the Confluence icon, or use a hotkey to start a quick search_
 
-
-![omnibox example](docs/demo-2.png)
-*Type `con ` and press space in a new tab to use the search shortcut.*
-
+![omnibox example](docs/omnibox.png)
+_Type `con ` and press space in a new tab to use the search shortcut._
 
 # First time install
 
-Click [this link](https://chrome.google.com/webstore/detail/confluence-quick-search/gimcmmlpmjffkpbomagapjhdfbbeldfk) and add to Chrome. 
+#### Add to your browser
 
-After install, you should set a keyboard shortcut. I prefer Command+Shift+L.
-
-Once you click the icon in Chrome, or activate the keyboard shortcut, you should specify your Confluence URL.
+#### Click the icon, or activate the keyboard shortcut, and specify your Confluence URL, including `/wiki` if present.
 
     https://your-confluence-url.atlassian.net/wiki
 
+#### Ensure you are logged into your Confluence site in order to use this extension.
 
-# I want to hack on it
+#### (optional, recommended) Set a keyboard shortcut
 
-    git clone https://github.com/anth0d/chrome-confluence-search.git
-    cd chrome-confluence-search
-    npm install && npm build
-    open chrome://extensions
-    # click "LOAD UNPACKED"
-    # navigate to this repo, and select the "dist" folder
+- Chrome: [Keyboard shortcuts](chrome://extensions/shortcuts)
+- Firefox (optional): Visit [about:addons](about:addons) and click the gear icon to manage extension shortcuts.
+  _Note that Firefox, unlike Chrome, enables the default shortcut_ `⌘+Shift+K` _automatically._
+
+#### (optional, recommended) Pin the extension to your toolbar for easier access
+
+# Developer docs
+
+## Run locally
+
+    git clone https://github.com/anth0d/confluence-quick-search.git
+    cd confluence-quick-search
+    npm install
+    npm run watch:chrome
+
+    # in another terminal
+    npm run chrome
+
+## Package a release
+
+    ./package.sh
