@@ -1,13 +1,12 @@
 import { enableFetchMocks } from "jest-fetch-mock";
-import { SearchResultProps } from "../components/SearchResult";
 
-import { ErrorCondition, searchRequest } from "./search";
+import { ErrorCondition, SearchResult, searchRequest } from ".";
 
 enableFetchMocks();
 
 test("happy path search", async () => {
   const BASE_URL = "http://fake";
-  const expected: SearchResultProps = {
+  const expected: SearchResult = {
     name: "Page Name",
     space: "The Space",
     resultLink: `${BASE_URL}/spaces/SPACE/pages/12345/Page+Name`,

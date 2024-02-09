@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React from "react";
 
 import { Category, trackEvent } from "../analytics";
 
@@ -8,7 +8,7 @@ export type SearchResultProps = {
   resultLink: string;
 };
 
-export function mapSearchResults(list?: SearchResultProps[]): ReactElement {
+export function mapSearchResults(list?: SearchResultProps[]): React.ReactElement {
   if (!list) {
     return <></>;
   }
@@ -32,7 +32,7 @@ export function mapSearchResults(list?: SearchResultProps[]): ReactElement {
   );
 }
 
-export default function SearchResult(props: SearchResultProps): ReactElement {
+export default function SearchResult(props: SearchResultProps): React.ReactElement {
   return (
     <>
       <a

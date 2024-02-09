@@ -1,21 +1,29 @@
-import React, { ReactElement, useState } from "react";
+import React, { useState } from "react";
 
 export type TextInputProps = {
   placeholder: string;
   onSubmit: (query: string) => void;
-  iconPath?: string;
+  iconData?: string; // e.g., "%3Csvg..."
+  iconFile?: string; // e.g., "images/icon.svg"
   initialValue?: string;
   small?: boolean;
   withOutline?: boolean;
 };
 
-export default function TextInput(props: TextInputProps): ReactElement {
+export default function TextInput(props: TextInputProps): React.ReactElement {
   const [userInput, setUserInput] = useState(props.initialValue || "");
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     props.onSubmit(userInput);
   };
+
+  let background = "";
+  if (props.iconFile) {
+    background = `url(${props.iconFile})`;
+  } else if (props.iconData) {
+    background = `url("data:image/svg+xml,${props.iconData}")`;
+  }
 
   return (
     <>
@@ -28,9 +36,9 @@ export default function TextInput(props: TextInputProps): ReactElement {
           onChange={(e) => setUserInput(e.target.value)}
           style={{
             width: "95%",
-            backgroundImage: props.iconPath ? `url(${props.iconPath})` : "",
+            background: background,
             backgroundRepeat: "no-repeat",
-            paddingLeft: props.iconPath ? "28px" : "0",
+            paddingLeft: background ? "28px" : "0",
             border: props.withOutline ? "" : "0",
             outline: props.withOutline ? "" : "none",
             fontSize: props.small ? "1.2em" : "1.4em",

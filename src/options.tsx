@@ -1,11 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import Popup from "./components/Popup";
-
+/*
+  "options_ui": {
+    "browser_style": true,
+    "page": "options.html"
+  },
+*/
 ReactDOM.render(
   <React.StrictMode>
-    <Popup />
+    <div>Options</div>
   </React.StrictMode>,
   document.getElementById("root"),
 );

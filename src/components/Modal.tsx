@@ -1,11 +1,11 @@
-import React, { ReactElement, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 type ModalProps = {
   visible: boolean;
   onClickOutside: () => void;
 };
 
-function Modal(props: React.PropsWithChildren<ModalProps>): ReactElement {
+export default function Modal(props: React.PropsWithChildren<ModalProps>): React.ReactElement {
   const { onClickOutside, visible } = props;
 
   const ref = useRef(null);
@@ -57,5 +57,3 @@ function Modal(props: React.PropsWithChildren<ModalProps>): ReactElement {
     </div>
   );
 }
-
-export default Modal;
