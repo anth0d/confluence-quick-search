@@ -1,6 +1,6 @@
 {
   "name": "confluence-quick-search",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Quickly search team knowledge with the press of a button",
   "private": true,
   "scripts": {
