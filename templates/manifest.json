@@ -36,8 +36,6 @@
     "keyword": "con"
   },
   "permissions": [
-    "notifications",
-    "storage",
-    "tabs"
+    "storage"
   ]
 }
